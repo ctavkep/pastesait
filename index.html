@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPTPastersScripts - ТОП 1 ПО ДЕТЕКТАМ</title>
-    <!-- Подключаем Tailwind для стилей -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -23,148 +22,215 @@
             scroll-behavior: smooth;
         }
 
-        #canvas-container {
+        /* Улучшенный контейнер фона */
+        #bg-wrapper {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+            background: linear-gradient(to bottom, #0a0a0a, #000000);
+        }
+
+        /* Эффект сетки для глубины */
+        #grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
         }
 
         canvas {
             display: block;
-            width: 100%;
-            height: 100%;
         }
 
         .glass-card {
-            background: rgba(15, 15, 15, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 15, 15, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .glass-card:hover {
             border-color: var(--accent-color);
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.1);
         }
 
         .neon-text {
-            text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
         }
 
         .pulse-button {
             background: var(--accent-color);
             transition: all 0.3s ease;
             cursor: pointer;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .pulse-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px var(--accent-color);
-            opacity: 0.9;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+            transform: scale(1.02);
+        }
+
+        .pulse-button:active {
+            transform: scale(0.98);
         }
 
         .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+            animation: fadeIn 1s ease-out forwards;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        #ban-feed {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+            width: calc(100% - 30px);
+            max-width: 320px;
+        }
+
+        .ban-toast {
+            background: rgba(20, 5, 5, 0.9);
+            border-left: 4px solid #ef4444;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(239, 68, 68, 0.1);
+            animation: toastIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
+                       toastOut 0.6s ease-in 4s forwards;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateX(-120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes toastOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-120%); opacity: 0; }
         }
 
         #copy-notification {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
             background: #ef4444;
             color: white;
-            padding: 15px 30px;
-            border-radius: 14px;
-            font-weight: 800;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 900;
             display: none;
-            z-index: 1000;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            animation: slideIn 0.3s ease-out;
+            z-index: 2000;
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @media (max-width: 768px) {
-            .text-8xl { font-size: 3.5rem; }
-        }
+        ::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
 
-    <div id="copy-notification">Скрипт скопирован!</div>
+    <div id="copy-notification">Скрипт в буфере обмена!</div>
+    <div id="ban-feed"></div>
 
-    <div id="canvas-container">
+    <div id="bg-wrapper">
+        <div id="grid-overlay"></div>
         <canvas id="particleCanvas"></canvas>
     </div>
 
-    <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-black/40 backdrop-blur-lg border-b border-white/10">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-5 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/5">
         <div class="text-2xl font-black tracking-tighter neon-text">GPTPasters<span class="text-red-500">Scripts</span></div>
-        <div class="flex space-x-6 text-xs md:text-sm font-bold uppercase tracking-widest text-gray-400">
-            <a href="#main" class="hover:text-white transition">Главная</a>
-            <a href="#features" class="hover:text-white transition">Функции</a>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest">DETECTION: 100%</span>
+            </div>
         </div>
     </nav>
 
-    <main id="main" class="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 text-center">
-        <div class="fade-in max-w-4xl">
-            <span class="px-5 py-1.5 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 text-[10px] font-black uppercase tracking-[0.2em] mb-8 inline-block">
-                ТОП 1 ПО ДЕТЕКТАМ В МИРЕ
+    <!-- Hero Section -->
+    <main class="relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 text-center">
+        <div class="fade-in max-w-4xl w-full">
+            <span class="px-5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] mb-8 inline-block">
+                #1 MOST DETECTED ROBLOX SOFTWARE
             </span>
-            <h1 class="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-none">
-                ТОП 1 ПО ДЕТЕКТАМ <br> 
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">СКРИПТ</span>
+            <h1 class="text-5xl sm:text-7xl md:text-9xl font-black mb-8 tracking-tighter leading-[0.9]">
+                БАН <br class="md:hidden"> ГАРАНТИРОВАН <br> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600">В ЛЮБОМ РЕЖИМЕ</span>
             </h1>
             
-            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">
-                Самый продвинутый софт для моментального бана вашего аккаунта в Roblox! <br class="hidden md:block"> Улетайте в вечный бан стильно.
+            <p class="text-gray-400 text-base md:text-2xl max-w-2xl mx-auto mb-12 font-medium leading-relaxed">
+                Зачем играть годами, если можно получить пермач за секунду? Самый быстрый способ очистить свою жизнь от Роблокса.
             </p>
 
-            <button onclick="copyScript()" class="pulse-button px-12 py-5 rounded-2xl font-black text-xl flex items-center gap-3 mx-auto uppercase tracking-tighter">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                Copy Script
+            <button onclick="copyScript()" class="pulse-button w-full sm:w-auto px-12 py-5 md:py-6 rounded-2xl font-black text-xl md:text-2xl flex items-center justify-center gap-4 mx-auto uppercase tracking-tighter">
+                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                Скопировать Скрипт
             </button>
         </div>
 
-        <!-- Секция Функций -->
-        <section id="features" class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-40 max-w-6xl w-full mb-40 fade-in" style="animation-delay: 0.2s">
-            <div class="glass-card p-10 text-left">
-                <div class="w-14 h-14 bg-red-500/20 rounded-2xl flex items-center justify-center mb-8 border border-red-500/30">
-                    <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <!-- Features Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mt-40 max-w-6xl w-full fade-in" style="animation-delay: 0.2s">
+            <div class="glass-card p-8 md:p-12 text-left">
+                <div class="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mb-8 border border-red-500/20">
+                    <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
-                <h3 class="text-2xl font-black mb-4 uppercase">Insta-Ban</h3>
-                <p class="text-gray-400 font-medium">Моментальный бан сразу после инжекта. Наша гордость и основная фишка.</p>
+                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight">Insta-Ban™</h3>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Алгоритм, который пишет в лог анти-чита "Эй, я тут использую скрипт!" каждые 10мс.</p>
             </div>
 
-            <div class="glass-card p-10 text-left">
-                <div class="w-14 h-14 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-8 border border-orange-500/30">
-                    <svg class="w-7 h-7 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <div class="glass-card p-8 md:p-12 text-left">
+                <div class="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-8 border border-orange-500/20">
+                    <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
-                <h3 class="text-2xl font-black mb-4 uppercase">Zero Protection</h3>
-                <p class="text-gray-400 font-medium">Полное отсутствие защиты. Мы гарантируем, что вас заметят все анти-читы мира.</p>
+                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight">0% Security</h3>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Никакой защиты. Мы буквально убрали все проверки, чтобы вас нашли быстрее.</p>
             </div>
 
-            <div class="glass-card p-10 text-left">
-                <div class="w-14 h-14 bg-gray-500/20 rounded-2xl flex items-center justify-center mb-8 border border-white/10">
-                    <svg class="w-7 h-7 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+            <div class="glass-card p-8 md:p-12 text-left">
+                <div class="w-14 h-14 bg-gray-500/10 rounded-2xl flex items-center justify-center mb-8 border border-white/10">
+                    <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"></path></svg>
                 </div>
-                <h3 class="text-2xl font-black mb-4 uppercase">Laggy UI</h3>
-                <p class="text-gray-400 font-medium">Интерфейс, который живет своей жизнью и потребляет 100% вашего процессора.</p>
+                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight">CPU Melter</h3>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Майним догикоины на вашем фоне, пока вы ждете загрузки меню бана.</p>
             </div>
         </section>
+
+        <!-- Testimonials -->
+        <section class="mt-40 max-w-6xl w-full fade-in" style="animation-delay: 0.4s">
+            <h2 class="text-4xl md:text-6xl font-black mb-16 uppercase tracking-tighter neon-text">Доска Почета (Забаненные)</h2>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Отзывы будут вставлены JS для чистоты кода -->
+            </div>
+        </section>
+
+        <footer class="mt-48 pb-10 text-gray-700 text-[10px] md:text-xs uppercase font-black tracking-[0.5em]">
+            GPTPasters 2024 — ТОЛЬКО ДЛЯ ТЕХ, КТО НЕ БОИТСЯ ПОТЕРЯТЬ ВСЁ
+        </footer>
     </main>
 
     <script>
@@ -182,16 +248,56 @@
             setTimeout(() => { note.style.display = 'none'; }, 3000);
         }
 
-        // Фон с частицами
+        const nicknames = ['NoobMaster', 'SkidDev', 'Paster13', 'AntiCheat', 'I_Love_Bans', 'HWID_Gone', 'BannedBot', 'LuckyGuy', 'Pro_Skid', 'Rblx_Gamer', 'Roblox_Admin_Lover', 'BanMePls', 'HackZor', 'ScriptKiddie99', 'PasterSupreme'];
+        const games = ['Adopt Me', 'Blox Fruits', 'Brookhaven', 'BedWars', 'MM2', 'Jailbreak', 'Doors', 'Blade Ball', 'Solitaire', 'Pet Sim 99', 'Natural Disaster', 'Tower of Hell', 'Strongman Sim', 'Build a Boat', 'Royale High', 'All Star Tower Defense', 'Bee Swarm Sim', 'Livetopia', 'Pls Donate', 'Da Hood', 'Grand Piece Online'];
+
+        function createBanToast() {
+            const feed = document.getElementById('ban-feed');
+            if (feed.children.length > 3) feed.children[0].remove();
+            const nick = nicknames[Math.floor(Math.random() * nicknames.length)] + (10 + Math.floor(Math.random() * 90));
+            const game = games[Math.floor(Math.random() * games.length)];
+            const time = (Math.random() * 0.4 + 0.1).toFixed(2);
+            const toast = document.createElement('div');
+            toast.className = 'ban-toast';
+            toast.innerHTML = `<span class="text-red-500 font-black">${nick}</span> бан в <span class="text-white">${game}</span> за ${time}s`;
+            feed.appendChild(toast);
+            setTimeout(() => { if(toast.parentNode) toast.remove(); }, 4500);
+        }
+        setInterval(() => { if (Math.random() > 0.4) createBanToast(); }, 2500);
+
+        const reviews = [
+            { name: "Vanya_Pro_2012", text: "Я искал чит для фарма, а нашел способ навсегда бросить Роблокс. Забанили за 0.001 сек. Теперь я наконец-то трогаю траву.", status: "Banned Forever", grad: "from-red-500 to-orange-500" },
+            { name: "Skid_Enthusiast", text: "Топ софт. Ввел ключ, нажал инжект — и сразу синий экран смерти. В поддержке сказали, что это 'Фича'. Рекомендую всем!", status: "HWID BANNED", grad: "from-blue-500 to-purple-500" },
+            { name: "AccountCreator_99", text: "Раньше я тратил деньги на робуксы, теперь я трачу время на создание нового аккаунта каждые 5 минут. Невероятный опыт!", status: "IP TERMINATED", grad: "from-green-500 to-teal-500" },
+            { name: "OldSchool_Gamer", text: "Мама спросила, почему я плачу. Я ответил, что мой аккаунт 2016 года улетел в помойку за секунду. Скрипт просто огонь.", status: "DELETED ACCOUNT", grad: "from-yellow-500 to-red-500" },
+            { name: "L33t_Girl_Roblox", text: "Лучшее вложение 0 рублей. Почувствовала себя хакером, когда увидела надпись 'You are banned from this game'.", status: "SERVER KICKED", grad: "from-pink-500 to-rose-500" },
+            { name: "Confused_Hacker", text: "Анти-чит даже не понял, что произошло. Я тоже. Мы оба были в шоке. 10 банов из 10.", status: "PERMANENT", grad: "from-indigo-500 to-purple-500" },
+            { name: "Telepathy_Skid", text: "Скрипт настолько детект, что меня забанили в дискорде разработчиков Роблокса, когда я просто зашел на этот сайт.", status: "PRE-EMPTIVE BAN", grad: "from-cyan-500 to-blue-500" },
+            { name: "Squad_Leader", text: "Хотел похвастаться перед друзьями крутыми функциями, но успел только нажать кнопку 'Run'. Теперь мы все играем в Майнкрафт.", status: "GROUP TERMINATED", grad: "from-orange-400 to-yellow-600" },
+            { name: "Honest_Reviewer", text: "Никаких обманов. Написано 'ТОП 1 ПО ДЕТЕКТАМ' — так и есть. Получил бан быстрее, чем загрузились текстуры.", status: "RELIABLE SOFWARE", grad: "from-gray-500 to-gray-800" },
+            { name: "Chef_Robloxi", text: "Мой компьютер начал греться так сильно, что я пожарил на нем яичницу. Скрипт действительно использует все ресурсы системы.", status: "CPU MELTED", grad: "from-red-600 to-black" }
+        ];
+
+        const reviewsContainer = document.getElementById('reviews-container');
+        reviews.forEach(r => {
+            reviewsContainer.innerHTML += `
+                <div class="glass-card p-10 text-left bg-white/5 italic">
+                    <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"${r.text}"</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br ${r.grad}"></div>
+                        <div>
+                            <p class="text-white font-bold text-sm">${r.name}</p>
+                            <p class="text-red-500 text-[11px] font-black uppercase tracking-widest">${r.status}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        
-        function resize() { 
-            canvas.width = window.innerWidth; 
-            canvas.height = window.innerHeight; 
-        }
-
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize);
 
         class Particle {
@@ -200,13 +306,12 @@
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.7;
-                this.speedY = (Math.random() - 0.5) * 0.7;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
                 this.opacity = Math.random() * 0.5 + 0.1;
             }
             update() {
-                this.x += this.speedX; 
-                this.y += this.speedY;
+                this.x += this.speedX; this.y += this.speedY;
                 if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
@@ -220,10 +325,7 @@
 
         function initParticles() {
             resize();
-            particles = [];
-            const count = window.innerWidth < 768 ? 40 : 100;
-            for(let i=0; i<count; i++) particles.push(new Particle());
-            
+            particles = Array.from({ length: 100 }, () => new Particle());
             function loop() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach(p => { p.update(); p.draw(); });
@@ -231,8 +333,7 @@
             }
             loop();
         }
-
-        window.addEventListener('DOMContentLoaded', initParticles);
+        window.onload = initParticles;
     </script>
 </body>
 </html>
