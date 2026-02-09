@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPTPastersScripts - Лучший софт для бана</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-color: #ef4444; 
+            --bg-dark: #050505;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+        }
+
+        .glass-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.1);
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .pulse-button {
+            background: var(--accent-color);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .pulse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+        #copy-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: none;
+            z-index: 100;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); }
+            to { transform: translateY(0); }
+        }
+
+        /* Индикатор загрузки для ИИ */
+        .loader {
+            border: 2px solid #333;
+            border-top: 2px solid var(--accent-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="custom-scroll">
+
+    <div id="copy-notification">Скрипт скопирован!</div>
+
+    <div id="canvas-container">
+        <canvas id="particleCanvas"></canvas>
+    </div>
+
+    <!-- Навигация -->
+    <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center bg-black/20 backdrop-blur-md border-b border-white/5">
+        <div class="text-2xl font-black tracking-tighter neon-text">GPTPasters<span class="text-red-500">Scripts</span></div>
+        <div class="flex space-x-8 text-sm font-medium uppercase tracking-widest text-gray-400">
+            <a href="#main" class="hover:text-white transition">Главная</a>
+            <a href="#features" class="hover:text-white transition">Наши функции</a>
+            <a href="#ai-section" class="hover:text-white transition">✨ ИИ Идеи</a>
+        </div>
+        <div class="w-[100px] hidden md:block"></div>
+    </nav>
+
+    <!-- Главный экран -->
+    <main id="main" class="relative min-h-screen flex flex-col items-center justify-center px-4 pt-20">
+        <div class="text-center fade-in">
+            <span class="px-4 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold uppercase tracking-widest mb-6 inline-block">
+                Вас забанят через 0.1 сек
+            </span>
+            <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-tight">
+                ТОП 1 ПО ДЕТЕКТАМ <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-600">СКРИПТ</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                Самый продвинутый софт для бана вашего клиента в Roblox! Улетите в бан быстрее, чем успеете нажать кнопку.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button onclick="copyScript()" class="pulse-button px-10 py-4 rounded-xl font-bold text-lg flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    Copy Script
+                </button>
+            </div>
+        </div>
+
+        <!-- Сетка карточек (Наши Функции) -->
+        <section id="features" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-32 max-w-6xl w-full mb-10 fade-in" style="animation-delay: 0.2s">
+            <div class="glass-card p-8">
+                <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-red-400">Молниеносная работа</h3>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li>• Вас забанят первым, когда вы заинжектите чит!</li>
+                    <li>• Худший триггер бот за всю историю скриптов!</li>
+                </ul>
+            </div>
+            <div class="glass-card p-8">
+                <div class="w-12 h-12 bg-gray-500/20 rounded-lg flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-gray-400">Безопасность</h3>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li>• Её нету! Мы гарантируем бан.</li>
+                    <li>• Худший ESP без оптимизации!</li>
+                    <li>• (Аимбот отсутствует)</li>
+                </ul>
+            </div>
+            <div class="glass-card p-8">
+                <div class="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-orange-400">Кастомизация</h3>
+                <ul class="text-gray-400 text-sm space-y-2">
+                    <li>• Самая плохая за всю историю!</li>
+                    <li>• Худший Desync!</li>
+                    <li>• Меню лагает, кнопки не нажимаются.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ✨ ИИ Секция -->
+        <section id="ai-section" class="max-w-4xl w-full mb-32 fade-in" style="animation-delay: 0.4s">
+            <div class="glass-card p-10 border-red-500/30 bg-red-500/5">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="text-3xl">✨</div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">ИИ-Генератор Плохих Идей</h2>
+                        <p class="text-gray-400 text-sm">Спроси Gemini, какую бесполезную функцию добавить в твой пастер-скрипт.</p>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4">
+                    <input type="text" id="ai-input" placeholder="Например: Сделай функцию для быстрого вылета..." 
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-red-500 transition">
+                    
+                    <button onclick="generateAIContent()" id="ai-btn" class="pulse-button w-full py-3 rounded-xl font-bold flex justify-center items-center gap-3">
+                        <span>Сгенерировать ✨</span>
+                        <div id="ai-loader" class="loader"></div>
+                    </button>
+
+                    <div id="ai-response" class="mt-6 p-4 rounded-lg bg-black/40 border border-white/5 text-gray-300 italic min-h-[60px] hidden">
+                        <!-- Сюда придет ответ от ИИ -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const apiKey = ""; // Пустая строка для окружения
+
+        async function generateAIContent() {
+            const input = document.getElementById('ai-input').value;
+            const btn = document.getElementById('ai-btn');
+            const loader = document.getElementById('ai-loader');
+            const responseDiv = document.getElementById('ai-response');
+
+            if (!input) return;
+
+            // Состояние загрузки
+            loader.style.display = 'block';
+            btn.disabled = true;
+            responseDiv.classList.remove('hidden');
+            responseDiv.innerText = "Думаем над чем-то очень плохим...";
+
+            const systemPrompt = "Ты - ироничный помощник для сайта 'GPTPastersScripts'. Сайт посвящен плохим скриптам, которые гарантируют бан в Roblox. Твоя задача: придумывать максимально абсурдные, бесполезные и вредные функции для скриптов в стиле 'вреда пользователю'. Отвечай коротко (1-2 предложения), дерзко и смешно на русском языке.";
+
+            const payload = {
+                contents: [{ parts: [{ text: input }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            let retries = 0;
+            const maxRetries = 5;
+            
+            async function makeRequest() {
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error('API Error');
+
+                    const data = await response.json();
+                    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    responseDiv.innerText = aiText || "Даже ИИ в шоке от этого запроса. Попробуй еще раз.";
+                } catch (error) {
+                    if (retries < maxRetries) {
+                        const delay = Math.pow(2, retries) * 1000;
+                        retries++;
+                        setTimeout(makeRequest, delay);
+                    } else {
+                        responseDiv.innerText = "Ошибка связи с сервером детектов. Попробуй позже.";
+                    }
+                } finally {
+                    loader.style.display = 'none';
+                    btn.disabled = false;
+                }
+            }
+
+            makeRequest();
+        }
+
+        function copyScript() {
+            const scriptText = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()';
+            const tempInput = document.createElement('input');
+            tempInput.value = scriptText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const note = document.getElementById('copy-notification');
+            note.style.display = 'block';
+            setTimeout(() => {
+                note.style.display = 'none';
+            }, 3000);
+        }
+
+        // --- BACKGROUND PARTICLES ---
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.alpha = Math.random() * 0.5 + 0.1;
+                this.pulseSpeed = Math.random() * 0.02 + 0.005;
+                this.pulseValue = Math.random() * Math.PI;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.pulseValue += this.pulseSpeed;
+                this.currentAlpha = this.alpha + Math.sin(this.pulseValue) * 0.15;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        this.x -= dx * 0.01;
+                        this.y -= dy * 0.01;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(239, 68, 68, ${this.currentAlpha})`;
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = 'rgba(239, 68, 68, 0.5)';
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            resize();
+            for (let i = 0; i < 120; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.onload = () => {
+            init();
+            animate();
+        };
+    </script>
+</body>
+</html>
