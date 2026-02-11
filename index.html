@@ -22,7 +22,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Улучшенный контейнер фона */
         #bg-wrapper {
             position: fixed;
             top: 0;
@@ -33,7 +32,6 @@
             background: linear-gradient(to bottom, #0a0a0a, #000000);
         }
 
-        /* Эффект сетки для глубины */
         #grid-overlay {
             position: absolute;
             top: 0;
@@ -85,6 +83,19 @@
 
         .pulse-button:active {
             transform: scale(0.98);
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
         }
 
         .fade-in {
@@ -187,10 +198,18 @@
                 Зачем играть годами, если можно получить пермач за секунду? Самый быстрый способ очистить свою жизнь от Роблокса.
             </p>
 
-            <button onclick="copyScript()" class="pulse-button w-full sm:w-auto px-12 py-5 md:py-6 rounded-2xl font-black text-xl md:text-2xl flex items-center justify-center gap-4 mx-auto uppercase tracking-tighter">
-                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                Скопировать Скрипт
-            </button>
+            <!-- Buttons Container -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-xl mx-auto">
+                <button onclick="copyScript('main')" class="pulse-button w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-lg md:text-xl flex items-center justify-center gap-4 uppercase tracking-tighter">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    Скопировать Скрипт
+                </button>
+
+                <button onclick="copyScript('aim')" class="secondary-button w-full sm:w-auto px-6 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-tighter text-gray-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path></svg>
+                    aimbotgpt
+                </button>
+            </div>
         </div>
 
         <!-- Features Grid -->
@@ -224,7 +243,7 @@
         <section class="mt-40 max-w-6xl w-full fade-in" style="animation-delay: 0.4s">
             <h2 class="text-4xl md:text-6xl font-black mb-16 uppercase tracking-tighter neon-text">Доска Почета (Забаненные)</h2>
             <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Отзывы будут вставлены JS для чистоты кода -->
+                <!-- Отзывы будут вставлены JS -->
             </div>
         </section>
 
@@ -234,8 +253,14 @@
     </main>
 
     <script>
-        function copyScript() {
-            const script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()';
+        function copyScript(type) {
+            let script = '';
+            if (type === 'main') {
+                script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()';
+            } else if (type === 'aim') {
+                script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt"))()';
+            }
+            
             const el = document.createElement('textarea');
             el.value = script;
             document.body.appendChild(el);
@@ -244,6 +269,7 @@
             document.body.removeChild(el);
 
             const note = document.getElementById('copy-notification');
+            note.innerText = type === 'aim' ? 'aimbotgpt скопирован!' : 'Скрипт в буфере обмена!';
             note.style.display = 'block';
             setTimeout(() => { note.style.display = 'none'; }, 3000);
         }
