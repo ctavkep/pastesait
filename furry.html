@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Наш Уютный Уголок</title>
+    <title>Наш уютный уголок | Furry Page</title>
     <style>
-        /* Основные настройки шрифтов и обновленный "домашний" фон */
+        :root {
+            --primary-color: #8d6e63;
+            --accent-color: #d7ccc8;
+            --text-color: #5d4037;
+            --bg-gradient: linear-gradient(135deg, #fff9c4 0%, #f8bbd0 50%, #e1bee7 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, 
-                rgba(255, 236, 179, 0.4) 0%, 
-                rgba(225, 190, 231, 0.4) 25%, 
-                rgba(179, 229, 252, 0.4) 50%, 
-                rgba(200, 230, 201, 0.4) 75%, 
-                rgba(255, 205, 210, 0.4) 100%);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
             background-attachment: fixed;
             background-size: 400% 400%;
-            animation: gradientBG 20s ease-in-out infinite;
-            color: #5d4037;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
         @keyframes gradientBG {
@@ -32,22 +35,142 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Навигация */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #ad1457;
+        }
+
+        /* Шапка */
         header {
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         header h1 {
-            font-size: 2.8em;
+            font-size: 3em;
             margin: 0;
-            color: #6d4c41;
-            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.8);
+            color: #4e342e;
+            text-shadow: 3px 3px 0px rgba(255,255,255,0.5);
         }
 
-        header p {
-            font-style: italic;
-            opacity: 0.8;
-            font-size: 1.1em;
+        .avatar-main {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        /* Секции контента */
+        .content-section {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 40px;
+            border-radius: 40px;
+            max-width: 900px;
+            margin: 20px auto;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* Кнопка чата и копирования */
+        .chat-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            background: #24A1DE; /* Цвет Telegram */
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(36, 161, 222, 0.3);
+        }
+
+        .copy-btn:hover {
+            background: #1e88ba;
+            transform: scale(1.05);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Всплывающее уведомление */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #4e342e;
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 2000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadeInOut 2.5s;
+        }
+
+        @keyframes fadeInOut {
+            0% { bottom: 0; opacity: 0; }
+            20% { bottom: 30px; opacity: 1; }
+            80% { bottom: 30px; opacity: 1; }
+            100% { bottom: 0; opacity: 0; }
+        }
+
+        /* Галерея */
+        .gallery-title {
+            text-align: center;
+            margin: 60px 0 30px;
+            font-size: 2em;
         }
 
         .gallery-container {
@@ -56,28 +179,20 @@
             gap: 30px;
             padding: 20px;
             max-width: 1200px;
-            width: 95%;
-            margin-bottom: 50px;
+            margin: 0 auto 80px;
         }
 
         .photo-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
             border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.8);
             padding: 15px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            transition: transform 0.4s ease;
         }
 
         .photo-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
         }
 
         .photo-card img {
@@ -85,159 +200,117 @@
             height: auto;
             border-radius: 20px;
             display: block;
-            object-fit: contain;
-            /* Настройка для баланса четкости */
             image-rendering: -webkit-optimize-contrast;
-            image-rendering: high-quality;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            background: rgba(255,255,255,0.2);
         }
 
         .photo-info {
-            width: 100%;
-            margin-top: 15px;
-            border-collapse: collapse;
-        }
-
-        .photo-info td {
-            padding: 8px 5px;
-            font-size: 0.95em;
-            border-bottom: 1px solid rgba(93, 64, 55, 0.1);
-        }
-
-        .photo-info tr:last-child td {
-            border-bottom: none;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #8d6e63;
-            width: 45%;
-        }
-
-        .value {
-            text-align: right;
-            color: #5d4037;
+            padding: 10px;
+            text-align: center;
         }
 
         footer {
-            margin-top: auto;
-            padding: 30px;
-            opacity: 0.5;
-            font-size: 0.9em;
+            padding: 60px 40px;
             text-align: center;
+            font-size: 0.9em;
+            opacity: 0.7;
         }
 
         @media (max-width: 600px) {
             header h1 { font-size: 2em; }
-            .gallery-container { grid-template-columns: 1fr; }
+            nav { gap: 10px; }
+            .content-section { margin: 10px; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🐾 Наш Пушистый Мир 🐾</h1>
-        <p>Уютное пространство для самых лучших друзей</p>
+    <nav>
+        <a href="#home">Главная</a>
+        <!-- Кнопка в меню теперь тоже копирует ссылку -->
+        <a onclick="copyLink()">Furry Chat</a>
+    </nav>
+
+    <header id="home">
+        <img src="https://i.postimg.cc/8kKnmCW4/photofurryjpg.jpg" alt="Аватар" class="avatar-main">
+        <h1>Привет, дорогой пользователь!</h1>
+        <p>Добро пожаловать в наш сборник артов с чата</p>
     </header>
 
-    <div class="gallery-container">
+    <!-- Переименованная секция о чате -->
+    <section class="content-section" id="about-chat">
+        <h2>Немного о нашем чате</h2>
+        <p>
+            Наш чат очень уютный, где все дружат друг с другом и всегда поддержат друг друга! ❤️
+        </p>
+    </section>
+
+    <!-- Секция Furry Chat с кнопкой копирования -->
+    <section class="content-section" id="furry-chat">
+        <h2>Furry Chat Telegram</h2>
+        <p>Присоединяйся к нашему сообществу! Нажми на кнопку ниже, чтобы скопировать ссылку на чат:</p>
         
-        <!-- Карточка 1 -->
+        <div class="chat-box">
+            <button class="copy-btn" onclick="copyLink()">
+                <span>📲 Копировать ссылку</span>
+            </button>
+        </div>
+        <p style="font-size: 0.8em; margin-top: 15px; opacity: 0.6;">Ссылка: https://t.me/fanasyyy</p>
+    </section>
+
+    <h2 class="gallery-title" id="gallery">Наша коллекция артов</h2>
+
+    <div class="gallery-container">
         <div class="photo-card">
             <img src="https://i.postimg.cc/Y0snrXMt/furry1.jpg" alt="Фурри фото 1">
-            <table class="photo-info">
-                <tr>
-                    <td class="label">Особенность:</td>
-                    <td class="value">Мягкие лапки</td>
-                </tr>
-                <tr>
-                    <td class="label">Стиль:</td>
-                    <td class="value">Уютный пушистик 🐾</td>
-                </tr>
-            </table>
+            <div class="photo-info"><strong>Мягкие лапки</strong></div>
         </div>
-
-        <!-- Карточка 2 -->
         <div class="photo-card">
             <img src="https://i.postimg.cc/d3xHsWw0/furry2.jpg" alt="Фурри фото 2">
-            <table class="photo-info">
-                <tr>
-                    <td class="label">Детали:</td>
-                    <td class="value">Красивый свет</td>
-                </tr>
-                <tr>
-                    <td class="label">Тип:</td>
-                    <td class="value">Комфортный арт 🎨</td>
-                </tr>
-            </table>
+            <div class="photo-info"><strong>Красивый свет</strong></div>
         </div>
-
-        <!-- Карточка 3 -->
         <div class="photo-card">
             <img src="https://i.postimg.cc/7hWsHBw6/furry3.jpg" alt="Фурри фото 3">
-            <table class="photo-info">
-                <tr>
-                    <td class="label">Заметка:</td>
-                    <td class="value">Лучший друг</td>
-                </tr>
-                <tr>
-                    <td class="label">Статус:</td>
-                    <td class="value">Любимое фото ❤️</td>
-                </tr>
-            </table>
+            <div class="photo-info"><strong>Лучший друг</strong></div>
         </div>
-
-        <!-- Карточка 4 -->
         <div class="photo-card">
             <img src="https://i.postimg.cc/4ySLf8s7/furry4.jpg" alt="Фурри фото 4">
-            <table class="photo-info">
-                <tr>
-                    <td class="label">Место:</td>
-                    <td class="value">Вдохновение</td>
-                </tr>
-                <tr>
-                    <td class="label">Эффект:</td>
-                    <td class="value">Пушистая магия ✨</td>
-                </tr>
-            </table>
+            <div class="photo-info"><strong>Вдохновение</strong></div>
         </div>
-
-        <!-- Карточка 5 -->
         <div class="photo-card">
             <img src="https://i.postimg.cc/C5QPhvSd/photo-2026-02-25-23-55-49.jpg" alt="Фурри фото 5">
-            <table class="photo-info">
-                <tr>
-                    <td class="label">Событие:</td>
-                    <td class="value">Тихий вечер</td>
-                </tr>
-                <tr>
-                    <td class="label">Настроение:</td>
-                    <td class="value">Чудесный момент ✨</td>
-                </tr>
-            </table>
+            <div class="photo-info"><strong>Тихий вечер</strong></div>
         </div>
-
-        <!-- Карточка 6 -->
         <div class="photo-card">
             <img src="https://i.postimg.cc/8kKnmCW4/photofurryjpg.jpg" alt="Фурри фото 6">
-            <table class="photo-info">
-                <tr>
-                    <td class="label">Событие:</td>
-                    <td class="value">Прогулка</td>
-                </tr>
-                <tr>
-                    <td class="label">Настроение:</td>
-                    <td class="value">Улыбки и радость 😊</td>
-                </tr>
-            </table>
+            <div class="photo-info"><strong>Прогулка</strong></div>
         </div>
-
     </div>
 
     <footer>
-        Сделано с теплотой для пушистого сообщества &copy; 2026
+        <p>&copy; 2026 Наш Уютный Сайт. Все права пушисты.</p>
     </footer>
+
+    <!-- Уведомление -->
+    <div id="toast">Ссылка скопирована! 🐾</div>
+
+    <script>
+        function copyLink() {
+            const link = "https://t.me/fanasyyy";
+            
+            // Создаем временный элемент для копирования
+            const el = document.createElement('textarea');
+            el.value = link;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            // Показываем уведомление
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2500);
+        }
+    </script>
 
 </body>
 </html>
