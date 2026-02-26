@@ -3,364 +3,467 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Наш уютный уголок | FurryCuteArts</title>
+    <title>GPTPastersScripts - ТОП 1 ПО ДЕТЕКТАМ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/scrollreveal"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent-pink: #fbcfe8;
-            --bg-dark: #070708;
+            --accent-color: #ef4444; 
+            --bg-dark: #050505;
         }
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             background-color: var(--bg-dark);
-            color: #eee;
+            color: white;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            width: 100%;
+            min-height: 100vh;
             scroll-behavior: smooth;
         }
 
-        /* Анимированный фон */
-        #bg-container {
+        /* --- НОВЫЙ АНИМИРОВАННЫЙ ФОН --- */
+        #bg-wrapper {
             position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: #030000;
+            overflow: hidden;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 150vw;
+            height: 150vh;
+            top: -25vh;
+            left: -25vw;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.08), transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(249, 115, 22, 0.05), transparent 40%);
+            animation: rotateAmbient 30s linear infinite;
+            filter: blur(60px);
+        }
+
+        @keyframes rotateAmbient {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        #grid-overlay {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0f0f13 0%, #070708 100%);
+            background-image: 
+                linear-gradient(rgba(239, 68, 68, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            /* Легкое движение сетки */
+            animation: panGrid 20s linear infinite;
+        }
+
+        @keyframes panGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+            opacity: 0.8;
+        }
+
+        /* --- АНИМАЦИИ ПОЯВЛЕНИЯ (SCROLL REVEAL) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Левитация карточек */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating { animation: float 6s ease-in-out infinite; }
+        .delay-1 { animation-delay: 0s; }
+        .delay-2 { animation-delay: 2s; }
+        .delay-3 { animation-delay: 4s; }
+
+        .glass-card {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
             overflow: hidden;
         }
 
-        .blob {
+        /* Блик на карточках при наведении */
+        .glass-card::before {
+            content: '';
             position: absolute;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(251, 207, 232, 0.12) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 100%);
-            border-radius: 50%;
-            filter: blur(120px);
-            animation: move 20s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: all 0.6s ease;
         }
 
-        .blob-1 { top: -25%; left: -15%; animation-duration: 25s; }
-        .blob-2 { bottom: -20%; right: -15%; animation-delay: -5s; }
-
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(10vw, 10vh) scale(1.1); }
-        }
-
-        /* Стеклянный эффект */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 32px;
-            transition: all 0.5s ease;
+        .glass-card:hover::before {
+            left: 200%;
         }
 
         .glass-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(251, 207, 232, 0.3);
-            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.15);
         }
 
-        /* Межстрочный интервал заголовка */
-        .hero-title {
-            line-height: 1.5 !important; 
-            letter-spacing: -0.02em;
+        .neon-text { text-shadow: 0 0 20px rgba(239, 68, 68, 0.7); }
+
+        .pulse-button {
+            background: var(--accent-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            object-fit: cover;
-            animation: float 6s infinite ease-in-out;
+        .pulse-button::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.3s ease;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .pulse-button:hover {
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+            transform: scale(1.03) translateY(-2px);
         }
 
-        .btn-main {
+        .pulse-button:hover::after { opacity: 1; }
+        .pulse-button:active { transform: scale(0.98); }
+
+        .secondary-button {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
-        }
-
-        .btn-main:hover {
-            background: var(--accent-pink);
-            color: #111;
-            transform: scale(1.05);
-        }
-
-        /* Двойная кнопка-капсула */
-        .btn-split {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 9999px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Добавил плавность и эффект пружинки */
-            color: #fff;
-        }
-
-        .btn-split:hover {
-            background: rgba(251, 207, 232, 0.15); /* Полупрозрачный розовый вместо яркого залива */
-            transform: scale(1.12); /* Увеличил расширение при наведении */
-            border-color: rgba(251, 207, 232, 0.4);
-            box-shadow: 0 10px 30px -10px rgba(251, 207, 232, 0.3); /* Легкое свечение */
-        }
-
-        .btn-split-item {
-            padding: 1.25rem 1.5rem;
-            font-weight: 900;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
             cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-family: inherit;
-            transition: opacity 0.2s ease;
+            backdrop-filter: blur(5px);
         }
 
-        @media (min-width: 768px) {
-            .btn-split-item {
-                padding: 1.25rem 2.5rem;
-                font-size: 1.25rem;
-            }
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
         }
 
-        .btn-split-item:hover {
-            opacity: 0.6;
+        .fade-in { animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .btn-split-divider {
-            width: 1px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            transition: background 0.3s ease;
+        #ban-feed {
+            position: fixed; bottom: 15px; left: 15px; z-index: 100;
+            display: flex; flex-direction: column; gap: 10px;
+            pointer-events: none; width: calc(100% - 30px); max-width: 320px;
         }
 
-        .btn-split:hover .btn-split-divider {
-            background: rgba(251, 207, 232, 0.4); /* Теперь линия тоже слегка розовая и полупрозрачная */
+        .ban-toast {
+            background: rgba(10, 5, 5, 0.85);
+            border-left: 4px solid #ef4444;
+            padding: 12px 18px; border-radius: 10px; font-size: 13px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(239, 68, 68, 0.15);
+            animation: toastIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
+                       toastOut 0.6s ease-in 4s forwards;
         }
 
-        /* Футер */
-        .footer-text {
-            color: rgba(255, 255, 255, 0.45);
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 0.5em;
-            font-size: 11px;
+        @keyframes toastIn {
+            from { transform: translateX(-120%) scale(0.9); opacity: 0; }
+            to { transform: translateX(0) scale(1); opacity: 1; }
+        }
+        @keyframes toastOut {
+            from { transform: translateX(0) scale(1); opacity: 1; }
+            to { transform: translateX(-120%) scale(0.9); opacity: 0; }
         }
 
         #copy-notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fbcfe8;
-            color: #000;
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            display: none;
-            z-index: 3000;
+            position: fixed; top: 25px; left: 50%; transform: translateX(-50%);
+            background: #ef4444; color: white; padding: 14px 28px;
+            border-radius: 50px; font-weight: 900; display: none; z-index: 2000;
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+            text-transform: uppercase; letter-spacing: 1px;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        
-        .modal.active {
-            display: flex;
-            opacity: 1;
+        @keyframes popIn {
+            from { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
 
-        .modal img {
-            max-width: 90%;
-            max-height: 85vh;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.1);
-            transform: scale(0.8);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal.active img {
-            transform: scale(1);
-        }
+        ::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
 
-    <div id="copy-notification">Ссылка скопирована! 🐾</div>
+    <div id="copy-notification">Скрипт в буфере обмена!</div>
+    <div id="ban-feed"></div>
 
-    <div id="modal" class="modal" onclick="closeModal()">
-        <img id="modal-img" src="" alt="Просмотр">
+    <div id="bg-wrapper">
+        <div class="ambient-glow"></div>
+        <div id="grid-overlay"></div>
+        <canvas id="particleCanvas"></canvas>
     </div>
 
-    <div id="bg-container">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
-
-    <!-- Навигация -->
-    <nav class="fixed top-0 w-full z-50 px-8 py-6 flex justify-between items-center bg-black/20 backdrop-blur-lg border-b border-white/5">
-        <div class="text-2xl font-black text-white tracking-tighter">Furry<span class="text-pink-200/50">CuteArts</span></div>
-        <button onclick="copyLink()" class="btn-main text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest">Чат</button>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-5 flex justify-between items-center bg-black/30 backdrop-blur-xl border-b border-white/5 transition-all duration-300 hover:bg-black/50">
+        <div class="text-2xl font-black tracking-tighter neon-text hover:scale-105 transition-transform cursor-default">GPTPasters<span class="text-red-500">Scripts</span></div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/30 rounded-lg hover:bg-red-500/20 transition-colors cursor-default">
+                <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_#ef4444]"></div>
+                <span class="text-[10px] font-black text-red-500 uppercase tracking-widest">DETECTION: 100%</span>
+            </div>
+        </div>
     </nav>
 
-    <main class="relative z-10 flex flex-col items-center pt-40 pb-20 px-4">
-        
-        <!-- Шапка -->
-        <header class="text-center mb-20 max-w-3xl flex flex-col items-center">
-            <img src="https://i.postimg.cc/KzKnyqdW/photo-2026-02-11-15-07-53.jpg" alt="Аватар" class="profile-avatar mb-10 reveal">
-            <h1 class="hero-title text-5xl md:text-7xl font-black text-white mb-6 reveal">
-                Уютный уголок <br><span class="text-pink-200/40">для своих</span>
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl mb-10 reveal">
-                Пространство творчества, общения и пушистых хвостов.
-            </p>
+    <!-- Hero Section -->
+    <main class="relative min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 text-center">
+        <div class="fade-in max-w-5xl w-full">
+            <span class="px-5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] mb-6 inline-block hover:bg-red-500/20 transition-colors">
+                #1 MOST DETECTED ROBLOX SOFTWARE
+            </span>
             
-            <div class="btn-split reveal mb-10">
-                <a href="https://t.me/fanasyyy" target="_blank" class="btn-split-item">Вступить</a>
-                <div class="btn-split-divider"></div>
-                <button onclick="copyLink()" class="btn-split-item">Скопировать</button>
-            </div>
-        </header>
+            <h1 class="text-4xl sm:text-6xl md:text-[5.5rem] lg:text-[6.5rem] font-black mb-8 leading-[1.05] tracking-tight drop-shadow-2xl" style="font-family: 'Montserrat', sans-serif;">
+                <!-- Красивый серебряно-металлический градиент -->
+                <span class="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-300 to-gray-600 drop-shadow-[0_2px_15px_rgba(255,255,255,0.15)]">БАН ГАРАНТИРОВАН</span><br> 
+                <!-- Яркий градиент для акцента -->
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-500 to-orange-500 drop-shadow-[0_0_20px_rgba(239,68,68,0.5)]">В ЛЮБОМ РЕЖИМЕ</span>
+            </h1>
+            
+            <p class="text-gray-400 text-base md:text-xl max-w-2xl mx-auto mb-14 font-medium leading-relaxed drop-shadow-md">
+                Зачем играть годами, если можно получить пермач за секунду? Самый быстрый способ очистить свою жизнь от Роблокса.
+            </p>
 
-        <!-- Блок: О нашем чате -->
-        <section class="max-w-3xl w-full mb-32 reveal">
-            <div class="glass-card p-10 md:p-12 text-center relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-pink-200/20 to-transparent"></div>
-                <h3 class="text-pink-200/60 uppercase tracking-[0.3em] font-black text-sm mb-6">О нашем чате</h3>
-                <p class="text-xl md:text-2xl text-gray-200 leading-relaxed italic font-light">
-                    "Наш чат — это место, где каждый может быть собой. Мы поддерживаем друг друга, делимся творчеством и просто приятно проводим время. ❤️"
-                </p>
-            </div>
-        </section>
+            <!-- Buttons Container -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5 max-w-xl mx-auto">
+                <button onclick="copyScript('main')" class="pulse-button w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-lg md:text-xl flex items-center justify-center gap-4 uppercase tracking-tighter">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    Скопировать Скрипт
+                </button>
 
-        <!-- Галерея -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full mb-32">
-            <!-- Карта 1 -->
-            <div class="glass-card p-5 reveal">
-                <img src="https://i.postimg.cc/d3xHsWw0/furry2.jpg" class="w-full rounded-2xl cursor-pointer hover:opacity-80 transition" onclick="openModal(this.src)">
-                <div class="mt-4 flex justify-between items-center px-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Ковбой в баре</span>
-                    <span class="text-pink-200/40">🌵</span>
-                </div>
-            </div>
-            <!-- Карта 2 -->
-            <div class="glass-card p-5 reveal">
-                <img src="https://i.postimg.cc/Y0snrXMt/furry1.jpg" class="w-full rounded-2xl cursor-pointer hover:opacity-80 transition" onclick="openModal(this.src)">
-                <div class="mt-4 flex justify-between items-center px-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Снежный стрелок</span>
-                    <span class="text-pink-200/40">❄️</span>
-                </div>
-            </div>
-            <!-- Карта 3 -->
-            <div class="glass-card p-5 reveal">
-                <img src="https://i.postimg.cc/7hWsHBw6/furry3.jpg" class="w-full rounded-2xl cursor-pointer hover:opacity-80 transition" onclick="openModal(this.src)">
-                <div class="mt-4 flex justify-between items-center px-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Ночной дозор</span>
-                    <span class="text-pink-200/40">🌙</span>
-                </div>
-            </div>
-            <!-- Карта 4 -->
-            <div class="glass-card p-5 reveal">
-                <img src="https://i.postimg.cc/4ySLf8s7/furry4.jpg" class="w-full rounded-2xl cursor-pointer hover:opacity-80 transition" onclick="openModal(this.src)">
-                <div class="mt-4 flex justify-between items-center px-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Пушистые объятия</span>
-                    <span class="text-pink-200/40">💙</span>
-                </div>
-            </div>
-            <!-- Карта 5 -->
-            <div class="glass-card p-5 reveal">
-                <img src="https://i.postimg.cc/C5QPhvSd/photo-2026-02-25-23-55-49.jpg" class="w-full rounded-2xl cursor-pointer hover:opacity-80 transition" onclick="openModal(this.src)">
-                <div class="mt-4 flex justify-between items-center px-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Отдых у бассейна</span>
-                    <span class="text-pink-200/40">✨</span>
-                </div>
-            </div>
-            <!-- Карта 6 -->
-            <div class="glass-card p-5 reveal">
-                <img src="https://i.postimg.cc/8kKnmCW4/photofurryjpg.jpg" class="w-full rounded-2xl cursor-pointer hover:opacity-80 transition" onclick="openModal(this.src)">
-                <div class="mt-4 flex justify-between items-center px-2">
-                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Дружная компания</span>
-                    <span class="text-pink-200/40">🐾</span>
-                </div>
+                <button onclick="copyScript('aim')" class="secondary-button w-full sm:w-auto px-6 py-4 rounded-xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-tighter text-gray-300">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path></svg>
+                    aimbotgpt
+                </button>
             </div>
         </div>
 
-        <!-- Футер -->
-        <footer class="mt-20 text-center px-4">
-            <p class="footer-text">FurryCuteArts вся пушистость защищена! &bull; 2026</p>
+        <!-- Features Grid -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mt-40 max-w-6xl w-full">
+            <div class="glass-card p-8 md:p-12 text-left reveal floating delay-1">
+                <div class="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mb-8 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                    <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight text-white drop-shadow-md">Insta-Ban™</h3>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Алгоритм, который пишет в лог анти-чита "Эй, я тут использую скрипт!" каждые 10мс.</p>
+            </div>
+
+            <div class="glass-card p-8 md:p-12 text-left reveal floating delay-2">
+                <div class="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-8 border border-orange-500/20 shadow-[0_0_15px_rgba(249,115,22,0.2)]">
+                    <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight text-white drop-shadow-md">0% Security</h3>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Никакой защиты. Мы буквально убрали все проверки, чтобы вас нашли быстрее.</p>
+            </div>
+
+            <div class="glass-card p-8 md:p-12 text-left reveal floating delay-3">
+                <div class="w-14 h-14 bg-gray-500/10 rounded-2xl flex items-center justify-center mb-8 border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                    <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight text-white drop-shadow-md">CPU Melter</h3>
+                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Майним догикоины на вашем фоне, пока вы ждете загрузки меню бана.</p>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="mt-40 max-w-6xl w-full reveal">
+            <h2 class="text-4xl md:text-6xl font-black mb-16 uppercase tracking-tighter neon-text" style="font-family: 'Montserrat', sans-serif;">Доска Почета <br class="md:hidden"><span class="text-xl md:text-3xl text-gray-400">(Забаненные)</span></h2>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Отзывы будут вставлены JS -->
+            </div>
+        </section>
+
+        <footer class="mt-48 pb-10 text-gray-700 text-[10px] md:text-xs uppercase font-black tracking-[0.5em] reveal">
+            GPTPasters 2024 — ТОЛЬКО ДЛЯ ТЕХ, КТО НЕ БОИТСЯ ПОТЕРЯТЬ ВСЁ
         </footer>
     </main>
 
     <script>
-        ScrollReveal().reveal('.reveal', { 
-            distance: '50px', 
-            duration: 1000, 
-            interval: 100, 
-            origin: 'bottom',
-            easing: 'cubic-bezier(0.5, 0, 0, 1)'
-        });
+        // Анимации при скролле (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
 
-        function copyLink() {
-            const link = "https://t.me/fanasyyy";
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Анимируем только один раз
+                }
+            });
+        }, observerOptions);
+
+        // Функция копирования
+        function copyScript(type) {
+            let script = '';
+            if (type === 'main') {
+                script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()';
+            } else if (type === 'aim') {
+                script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt"))()';
+            }
+            
             const el = document.createElement('textarea');
-            el.value = link;
+            el.value = script;
             document.body.appendChild(el);
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
 
             const note = document.getElementById('copy-notification');
+            note.innerText = type === 'aim' ? 'aimbotgpt скопирован!' : 'Скрипт в буфере обмена!';
             note.style.display = 'block';
-            setTimeout(() => { note.style.display = 'none'; }, 2000);
+            
+            // Сброс анимации
+            note.style.animation = 'none';
+            note.offsetHeight; /* trigger reflow */
+            note.style.animation = null; 
+
+            setTimeout(() => { note.style.display = 'none'; }, 3000);
         }
 
-        function openModal(src) {
-            const modal = document.getElementById('modal');
-            const img = document.getElementById('modal-img');
-            img.src = src;
-            modal.style.display = 'flex';
-            setTimeout(() => modal.classList.add('active'), 10);
-            document.body.style.overflow = 'hidden';
+        const nicknames = ['NoobMaster', 'SkidDev', 'Paster13', 'AntiCheat', 'I_Love_Bans', 'HWID_Gone', 'BannedBot', 'LuckyGuy', 'Pro_Skid', 'Rblx_Gamer', 'Roblox_Admin_Lover', 'BanMePls', 'HackZor', 'ScriptKiddie99', 'PasterSupreme'];
+        const games = ['Adopt Me', 'Blox Fruits', 'Brookhaven', 'BedWars', 'MM2', 'Jailbreak', 'Doors', 'Blade Ball', 'Solitaire', 'Pet Sim 99', 'Natural Disaster', 'Tower of Hell', 'Strongman Sim', 'Build a Boat', 'Royale High', 'All Star Tower Defense', 'Bee Swarm Sim', 'Livetopia', 'Pls Donate', 'Da Hood', 'Grand Piece Online'];
+
+        function createBanToast() {
+            const feed = document.getElementById('ban-feed');
+            if (feed.children.length > 3) feed.children[0].remove();
+            const nick = nicknames[Math.floor(Math.random() * nicknames.length)] + (10 + Math.floor(Math.random() * 90));
+            const game = games[Math.floor(Math.random() * games.length)];
+            const time = (Math.random() * 0.4 + 0.1).toFixed(2);
+            const toast = document.createElement('div');
+            toast.className = 'ban-toast';
+            toast.innerHTML = `<span class="text-red-500 font-black">${nick}</span> бан в <span class="text-white">${game}</span> за ${time}s`;
+            feed.appendChild(toast);
+            setTimeout(() => { if(toast.parentNode) toast.remove(); }, 4500);
+        }
+        setInterval(() => { if (Math.random() > 0.4) createBanToast(); }, 2500);
+
+        const reviews = [
+            { name: "Vanya_Pro_2012", text: "Я искал чит для фарма, а нашел способ навсегда бросить Роблокс. Забанили за 0.001 сек. Теперь я наконец-то трогаю траву.", status: "Banned Forever", grad: "from-red-500 to-orange-500" },
+            { name: "Skid_Enthusiast", text: "Топ софт. Ввел ключ, нажал инжект — и сразу синий экран смерти. В поддержке сказали, что это 'Фича'. Рекомендую всем!", status: "HWID BANNED", grad: "from-blue-500 to-purple-500" },
+            { name: "AccountCreator_99", text: "Раньше я тратил деньги на робуксы, теперь я трачу время на создание нового аккаунта каждые 5 минут. Невероятный опыт!", status: "IP TERMINATED", grad: "from-green-500 to-teal-500" },
+            { name: "OldSchool_Gamer", text: "Мама спросила, почему я плачу. Я ответил, что мой аккаунт 2016 года улетел в помойку за секунду. Скрипт просто огонь.", status: "DELETED ACCOUNT", grad: "from-yellow-500 to-red-500" },
+            { name: "L33t_Girl_Roblox", text: "Лучшее вложение 0 рублей. Почувствовала себя хакером, когда увидела надпись 'You are banned from this game'.", status: "SERVER KICKED", grad: "from-pink-500 to-rose-500" },
+            { name: "Confused_Hacker", text: "Анти-чит даже не понял, что произошло. Я тоже. Мы оба были в шоке. 10 банов из 10.", status: "PERMANENT", grad: "from-indigo-500 to-purple-500" }
+        ];
+
+        const reviewsContainer = document.getElementById('reviews-container');
+        reviews.forEach((r, index) => {
+            // Добавляем класс reveal для каждого отзыва
+            reviewsContainer.innerHTML += `
+                <div class="glass-card p-10 text-left bg-white/5 italic reveal transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)]" style="transition-delay: ${index * 0.1}s">
+                    <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"${r.text}"</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br ${r.grad} shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
+                        <div>
+                            <p class="text-white font-bold text-sm drop-shadow-md">${r.name}</p>
+                            <p class="text-red-500 text-[11px] font-black uppercase tracking-widest">${r.status}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Наблюдаем за всеми элементами с классом reveal
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Анимация частиц
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resize() { 
+            canvas.width = document.documentElement.clientWidth; 
+            canvas.height = document.documentElement.clientHeight || window.innerHeight; 
+        }
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() { this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.4 + 0.1;
+                // Добавляем плавное мерцание
+                this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                this.pulseDir = Math.random() > 0.5 ? 1 : -1;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                
+                // Эффект мерцания
+                this.opacity += this.pulseSpeed * this.pulseDir;
+                if(this.opacity >= 0.6) this.pulseDir = -1;
+                if(this.opacity <= 0.1) this.pulseDir = 1;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(239, 68, 68, ${this.opacity})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "rgba(239, 68, 68, 0.5)";
+                ctx.fill();
+            }
         }
 
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }, 400);
+        function initParticles() {
+            resize();
+            particles = Array.from({ length: 80 }, () => new Particle());
+            function loop() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                requestAnimationFrame(loop);
+            }
+            loop();
         }
+        window.onload = initParticles;
     </script>
 </body>
 </html>
