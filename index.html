@@ -25,17 +25,19 @@
             scroll-behavior: smooth;
         }
 
-        /* --- НОВЫЙ АНИМИРОВАННЫЙ ФОН --- */
+        /* --- ОБНОВЛЕННЫЙ АНИМИРОВАННЫЙ ФОН --- */
         #bg-wrapper {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0; /* Изменено с -1 для фикса на мобилках */
-            background: #030000;
+            z-index: 0;
+            background: #020000;
             overflow: hidden;
-            pointer-events: none; /* Фон не должен перекрывать клики */
+            pointer-events: none;
+            /* Создаем глубину для эффекта движения на пользователя */
+            perspective: 800px; 
         }
 
         .ambient-glow {
@@ -45,48 +47,58 @@
             top: -25vh;
             left: -25vw;
             background: 
-                radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.08), transparent 40%),
-                radial-gradient(circle at 70% 70%, rgba(249, 115, 22, 0.05), transparent 40%);
-            animation: rotateAmbient 30s linear infinite;
-            filter: blur(60px);
-            will-change: transform; /* Оптимизация для плавности */
+                radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.2), transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(249, 115, 22, 0.1), transparent 50%);
+            animation: rotateAmbient 20s linear infinite;
+            filter: blur(80px);
+            will-change: transform;
         }
 
         @keyframes rotateAmbient {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
+            0% { transform: rotate(0deg) scale(1.2); }
+            50% { transform: rotate(180deg) scale(1.4); }
+            100% { transform: rotate(360deg) scale(1.2); }
         }
 
         #grid-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -50%; /* Выносим за границы для корректного наклона */
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Увеличенные квадраты и яркие линии */
             background-image: 
-                linear-gradient(rgba(239, 68, 68, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(239, 68, 68, 0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
+                linear-gradient(rgba(239, 68, 68, 0.2) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.2) 2px, transparent 2px);
+            background-size: 100px 100px; 
             pointer-events: none;
-            /* Легкое движение сетки */
-            animation: panGrid 20s linear infinite;
+            
+            /* Наклон для эффекта 3D дороги */
+            transform: rotateX(60deg);
+            transform-origin: center;
+            
+            /* Анимация движения на пользователя */
+            animation: panGrid 3s linear infinite;
             will-change: background-position;
+
+            /* Затухание у краев (эффект виньетки) */
+            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
+            mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
         }
 
         @keyframes panGrid {
             0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
+            100% { background-position: 0 100px; } /* Движение только по вертикали для эффекта езды */
         }
 
         canvas {
             display: block;
             position: absolute;
             top: 0; left: 0;
-            opacity: 0.8;
+            opacity: 1; /* Повысил яркость частиц */
         }
 
-        /* --- АНИМАЦИИ ПОЯВЛЕНИЯ (SCROLL REVEAL) --- */
+        /* --- ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ СОДЕРЖИМОГО) --- */
         .reveal {
             opacity: 0;
             transform: translateY(50px) scale(0.95);
@@ -98,7 +110,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Левитация карточек */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-12px); }
@@ -111,7 +122,7 @@
         .delay-3 { animation-delay: 4s; }
 
         .glass-card {
-            background: rgba(15, 15, 15, 0.6);
+            background: rgba(10, 10, 10, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -121,7 +132,6 @@
             overflow: hidden;
         }
 
-        /* Блик на карточках при наведении */
         .glass-card::before {
             content: '';
             position: absolute;
@@ -130,13 +140,11 @@
             transition: all 0.6s ease;
         }
 
-        .glass-card:hover::before {
-            left: 200%;
-        }
+        .glass-card:hover::before { left: 200%; }
 
         .glass-card:hover {
             border-color: rgba(239, 68, 68, 0.5);
-            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.15);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.25);
         }
 
         .neon-text { text-shadow: 0 0 20px rgba(239, 68, 68, 0.7); }
@@ -151,19 +159,10 @@
             overflow: hidden;
         }
 
-        .pulse-button::after {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-
         .pulse-button:hover {
             box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
             transform: scale(1.03) translateY(-2px);
         }
-
-        .pulse-button:hover::after { opacity: 1; }
-        .pulse-button:active { transform: scale(0.98); }
 
         .secondary-button {
             background: rgba(255, 255, 255, 0.05);
@@ -192,10 +191,10 @@
         }
 
         .ban-toast {
-            background: rgba(10, 5, 5, 0.85);
+            background: rgba(10, 5, 5, 0.9);
             border-left: 4px solid #ef4444;
             padding: 12px 18px; border-radius: 10px; font-size: 13px;
-            backdrop-filter: blur(10px); border: 1px solid rgba(239, 68, 68, 0.15);
+            backdrop-filter: blur(10px); border: 1px solid rgba(239, 68, 68, 0.25);
             animation: toastIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
                        toastOut 0.6s ease-in 4s forwards;
         }
@@ -237,7 +236,6 @@
         <canvas id="particleCanvas"></canvas>
     </div>
 
-    <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 px-6 py-5 flex justify-between items-center bg-black/30 backdrop-blur-xl border-b border-white/5 transition-all duration-300 hover:bg-black/50">
         <div class="text-2xl font-black tracking-tighter neon-text hover:scale-105 transition-transform cursor-default">GPTPasters<span class="text-red-500">Scripts</span></div>
         <div class="flex items-center gap-4">
@@ -248,7 +246,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section (Добавлен relative z-10 чтобы фон не перекрывал контент) -->
     <main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 text-center">
         <div class="fade-in max-w-5xl w-full">
             <span class="px-5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] mb-6 inline-block hover:bg-red-500/20 transition-colors">
@@ -256,9 +253,7 @@
             </span>
             
             <h1 class="text-4xl sm:text-6xl md:text-[5.5rem] lg:text-[6.5rem] font-black mb-8 leading-[1.05] tracking-tight drop-shadow-2xl" style="font-family: 'Montserrat', sans-serif;">
-                <!-- Красивый серебряно-металлический градиент -->
                 <span class="text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-300 to-gray-600 drop-shadow-[0_2px_15px_rgba(255,255,255,0.15)]">БАН ГАРАНТИРОВАН</span><br> 
-                <!-- Яркий градиент для акцента -->
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-500 to-orange-500 drop-shadow-[0_0_20px_rgba(239,68,68,0.5)]">В ЛЮБОМ РЕЖИМЕ</span>
             </h1>
             
@@ -266,7 +261,6 @@
                 Зачем играть годами, если можно получить пермач за секунду? Самый быстрый способ очистить свою жизнь от Роблокса.
             </p>
 
-            <!-- Buttons Container -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-5 max-w-xl mx-auto">
                 <button onclick="copyScript('main')" class="pulse-button w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-lg md:text-xl flex items-center justify-center gap-4 uppercase tracking-tighter">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
@@ -280,7 +274,6 @@
             </div>
         </div>
 
-        <!-- Features Grid -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mt-40 max-w-6xl w-full">
             <div class="glass-card p-8 md:p-12 text-left reveal floating delay-1">
                 <div class="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mb-8 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
@@ -307,12 +300,9 @@
             </div>
         </section>
 
-        <!-- Testimonials -->
         <section class="mt-40 max-w-6xl w-full reveal">
             <h2 class="text-4xl md:text-6xl font-black mb-16 uppercase tracking-tighter neon-text" style="font-family: 'Montserrat', sans-serif;">Доска Почета <br class="md:hidden"><span class="text-xl md:text-3xl text-gray-400">(Забаненные)</span></h2>
-            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Отзывы будут вставлены JS -->
-            </div>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </section>
 
         <footer class="mt-48 pb-10 text-gray-700 text-[10px] md:text-xs uppercase font-black tracking-[0.5em] reveal">
@@ -321,47 +311,26 @@
     </main>
 
     <script>
-        // Анимации при скролле (Intersection Observer)
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15
-        };
-
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Анимируем только один раз
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Функция копирования
         function copyScript(type) {
-            let script = '';
-            if (type === 'main') {
-                script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()';
-            } else if (type === 'aim') {
-                script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt"))()';
-            }
-            
+            let script = type === 'main' ? 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()' : 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt"))()';
             const el = document.createElement('textarea');
-            el.value = script;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
+            el.value = script; document.body.appendChild(el); el.select();
+            document.execCommand('copy'); document.body.removeChild(el);
 
             const note = document.getElementById('copy-notification');
             note.innerText = type === 'aim' ? 'aimbotgpt скопирован!' : 'Скрипт в буфере обмена!';
             note.style.display = 'block';
-            
-            // Сброс анимации
-            note.style.animation = 'none';
-            note.offsetHeight; /* trigger reflow */
-            note.style.animation = null; 
-
+            note.style.animation = 'none'; note.offsetHeight; note.style.animation = null; 
             setTimeout(() => { note.style.display = 'none'; }, 3000);
         }
 
@@ -392,35 +361,27 @@
         ];
 
         const reviewsContainer = document.getElementById('reviews-container');
-        let htmlContent = '';
         reviews.forEach((r, index) => {
-            htmlContent += `
-                <div class="glass-card p-10 text-left bg-white/5 italic reveal transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(255,255,255,0.05)]" style="transition-delay: ${index * 0.1}s">
+            reviewsContainer.innerHTML += `
+                <div class="glass-card p-10 text-left bg-white/5 italic reveal transition-transform hover:-translate-y-2" style="transition-delay: ${index * 0.1}s">
                     <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"${r.text}"</p>
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-gradient-to-br ${r.grad} shadow-[0_0_15px_rgba(0,0,0,0.5)]"></div>
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br ${r.grad}"></div>
                         <div>
-                            <p class="text-white font-bold text-sm drop-shadow-md">${r.name}</p>
+                            <p class="text-white font-bold text-sm">${r.name}</p>
                             <p class="text-red-500 text-[11px] font-black uppercase tracking-widest">${r.status}</p>
                         </div>
                     </div>
                 </div>
             `;
         });
-        reviewsContainer.innerHTML = htmlContent;
 
-        // Наблюдаем за всеми элементами с классом reveal
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Анимация частиц
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        
-        function resize() { 
-            canvas.width = window.innerWidth; 
-            canvas.height = window.innerHeight; 
-        }
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize);
 
         class Particle {
@@ -428,43 +389,26 @@
             init() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.6;
-                this.speedY = (Math.random() - 0.5) * 0.6;
-                this.opacity = Math.random() * 0.4 + 0.1;
-                // Добавляем плавное мерцание
-                this.pulseSpeed = Math.random() * 0.02 + 0.01;
-                this.pulseDir = Math.random() > 0.5 ? 1 : -1;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 1.5;
+                this.speedY = (Math.random() - 0.5) * 1.5;
+                this.opacity = Math.random() * 0.5 + 0.3;
             }
             update() {
-                this.x += this.speedX; 
-                this.y += this.speedY;
-                
-                // Эффект мерцания
-                this.opacity += this.pulseSpeed * this.pulseDir;
-                if(this.opacity >= 0.6) this.pulseDir = -1;
-                if(this.opacity <= 0.1) this.pulseDir = 1;
-
-                // Защита от "застревания" частиц при уменьшении окна
-                if (this.x <= 0) { this.x = 0; this.speedX *= -1; }
-                else if (this.x >= canvas.width) { this.x = canvas.width; this.speedX *= -1; }
-
-                if (this.y <= 0) { this.y = 0; this.speedY *= -1; }
-                else if (this.y >= canvas.height) { this.y = canvas.height; this.speedY *= -1; }
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
             draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
                 ctx.fillStyle = `rgba(239, 68, 68, ${this.opacity})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = "rgba(239, 68, 68, 0.5)";
                 ctx.fill();
             }
         }
 
         function initParticles() {
             resize();
-            particles = Array.from({ length: 80 }, () => new Particle());
+            particles = Array.from({ length: 100 }, () => new Particle());
             function loop() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach(p => { p.update(); p.draw(); });
@@ -472,9 +416,6 @@
             }
             loop();
         }
-        
-        // ВАЖНО: Запускаем скрипт сразу после построения DOM
-        // Это обходит проблему, когда внешний скрипт Tailwind ломает window.onload
         document.addEventListener('DOMContentLoaded', initParticles);
     </script>
 </body>
