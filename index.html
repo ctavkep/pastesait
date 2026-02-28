@@ -36,7 +36,6 @@
             background: #020000;
             overflow: hidden;
             pointer-events: none;
-            /* Создаем глубину для эффекта движения на пользователя */
             perspective: 800px; 
         }
 
@@ -62,43 +61,36 @@
 
         #grid-overlay {
             position: absolute;
-            top: -50%; /* Выносим за границы для корректного наклона */
+            top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            /* Увеличенные квадраты и яркие линии */
             background-image: 
                 linear-gradient(rgba(239, 68, 68, 0.2) 2px, transparent 2px),
                 linear-gradient(90deg, rgba(239, 68, 68, 0.2) 2px, transparent 2px);
             background-size: 100px 100px; 
             pointer-events: none;
-            
-            /* Наклон для эффекта 3D дороги */
             transform: rotateX(60deg);
             transform-origin: center;
-            
-            /* Анимация движения на пользователя */
             animation: panGrid 3s linear infinite;
             will-change: background-position;
-
-            /* Затухание у краев (эффект виньетки) */
             -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
             mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
         }
 
         @keyframes panGrid {
             0% { background-position: 0 0; }
-            100% { background-position: 0 100px; } /* Движение только по вертикали для эффекта езды */
+            100% { background-position: 0 100px; }
         }
 
         canvas {
             display: block;
             position: absolute;
             top: 0; left: 0;
-            opacity: 1; /* Повысил яркость частиц */
+            opacity: 1;
         }
 
-        /* --- ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ СОДЕРЖИМОГО) --- */
+        /* --- ЭФФЕКТЫ --- */
         .reveal {
             opacity: 0;
             transform: translateY(50px) scale(0.95);
@@ -275,28 +267,43 @@
         </div>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mt-40 max-w-6xl w-full">
-            <div class="glass-card p-8 md:p-12 text-left reveal floating delay-1">
-                <div class="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mb-8 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                    <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div class="glass-card p-10 text-left bg-white/5 italic reveal floating delay-1 transition-transform hover:-translate-y-2">
+                <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"Алгоритм, который пишет в лог анти-чита 'Эй, я тут использую скрипт!' каждые 10мс."</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">Insta-Ban™</p>
+                        <p class="text-red-500 text-[11px] font-black uppercase tracking-widest">EXPRESS DELIVERY</p>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight text-white drop-shadow-md">Insta-Ban™</h3>
-                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Алгоритм, который пишет в лог анти-чита "Эй, я тут использую скрипт!" каждые 10мс.</p>
             </div>
 
-            <div class="glass-card p-8 md:p-12 text-left reveal floating delay-2">
-                <div class="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-8 border border-orange-500/20 shadow-[0_0_15px_rgba(249,115,22,0.2)]">
-                    <svg class="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <div class="glass-card p-10 text-left bg-white/5 italic reveal floating delay-2 transition-transform hover:-translate-y-2">
+                <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"Никакой защиты. Мы буквально убрали все проверки, чтобы вас нашли быстрее."</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20 shadow-[0_0_15px_rgba(249,115,22,0.2)]">
+                        <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">0% Security</p>
+                        <p class="text-orange-500 text-[11px] font-black uppercase tracking-widest">Naked & Afraid</p>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight text-white drop-shadow-md">0% Security</h3>
-                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Никакой защиты. Мы буквально убрали все проверки, чтобы вас нашли быстрее.</p>
             </div>
 
-            <div class="glass-card p-8 md:p-12 text-left reveal floating delay-3">
-                <div class="w-14 h-14 bg-gray-500/10 rounded-2xl flex items-center justify-center mb-8 border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-                    <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"></path></svg>
+            <div class="glass-card p-10 text-left bg-white/5 italic reveal floating delay-3 transition-transform hover:-translate-y-2">
+                <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"Майним догикоины на вашем фоне, пока вы ждете загрузки меню бана."</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-500/10 flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                        <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">CPU Melter</p>
+                        <p class="text-gray-400 text-[11px] font-black uppercase tracking-widest">FREE HEATER</p>
+                    </div>
                 </div>
-                <h3 class="text-2xl font-black mb-4 uppercase tracking-tight text-white drop-shadow-md">CPU Melter</h3>
-                <p class="text-gray-400 text-sm md:text-base leading-relaxed">Майним догикоины на вашем фоне, пока вы ждете загрузки меню бана.</p>
             </div>
         </section>
 
