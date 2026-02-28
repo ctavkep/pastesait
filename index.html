@@ -51,12 +51,14 @@
             animation: rotateAmbient 20s linear infinite;
             filter: blur(80px);
             will-change: transform;
+            transform: translateZ(0); /* Аппаратное ускорение */
         }
 
+        /* Оптимизированная анимация с поддержкой GPU */
         @keyframes rotateAmbient {
-            0% { transform: rotate(0deg) scale(1.2); }
-            50% { transform: rotate(180deg) scale(1.4); }
-            100% { transform: rotate(360deg) scale(1.2); }
+            0% { transform: rotate(0deg) scale(1.2) translateZ(0); }
+            50% { transform: rotate(180deg) scale(1.4) translateZ(0); }
+            100% { transform: rotate(360deg) scale(1.2) translateZ(0); }
         }
 
         #grid-overlay {
@@ -65,22 +67,33 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background-image: 
-                linear-gradient(rgba(239, 68, 68, 0.2) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(239, 68, 68, 0.2) 2px, transparent 2px);
-            background-size: 100px 100px; 
             pointer-events: none;
-            transform: rotateX(60deg);
+            /* Переносим анимацию на псевдоэлемент, здесь оставляем только статику */
+            transform: rotateX(60deg) translateZ(0);
             transform-origin: center;
-            animation: panGrid 3s linear infinite;
-            will-change: background-position;
             -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
             mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
         }
 
-        @keyframes panGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100px; }
+        /* Используем ::before для анимации transform вместо тяжелого background-position */
+        #grid-overlay::before {
+            content: '';
+            position: absolute;
+            top: -100px; 
+            left: 0; 
+            width: 100%; 
+            height: calc(100% + 100px);
+            background-image: 
+                linear-gradient(rgba(239, 68, 68, 0.2) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.2) 2px, transparent 2px);
+            background-size: 100px 100px;
+            animation: panGridGPU 3s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes panGridGPU {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
         }
 
         canvas {
@@ -93,22 +106,26 @@
         /* --- ЭФФЕКТЫ --- */
         .reveal {
             opacity: 0;
-            transform: translateY(50px) scale(0.95);
+            transform: translateY(50px) scale(0.95) translateZ(0);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
         }
         
         .reveal.active {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0) scale(1) translateZ(0);
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
+            0% { transform: translateY(0px) translateZ(0); }
+            50% { transform: translateY(-12px) translateZ(0); }
+            100% { transform: translateY(0px) translateZ(0); }
         }
         
-        .floating { animation: float 6s ease-in-out infinite; }
+        .floating { 
+            animation: float 6s ease-in-out infinite; 
+            will-change: transform;
+        }
         .delay-1 { animation-delay: 0s; }
         .delay-2 { animation-delay: 2s; }
         .delay-3 { animation-delay: 4s; }
@@ -122,6 +139,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            transform: translateZ(0); /* Аппаратное ускорение */
         }
 
         .glass-card::before {
@@ -149,6 +167,7 @@
             -webkit-tap-highlight-color: transparent;
             position: relative;
             overflow: hidden;
+            will-change: transform, box-shadow;
         }
 
         .pulse-button:hover {
@@ -162,6 +181,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             backdrop-filter: blur(5px);
+            will-change: transform, border-color;
         }
 
         .secondary-button:hover {
@@ -189,6 +209,8 @@
             backdrop-filter: blur(10px); border: 1px solid rgba(239, 68, 68, 0.25);
             animation: toastIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
                        toastOut 0.6s ease-in 4s forwards;
+            will-change: transform, opacity;
+            transform: translateZ(0);
         }
 
         @keyframes toastIn {
@@ -207,6 +229,7 @@
             box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
             text-transform: uppercase; letter-spacing: 1px;
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform, opacity;
         }
 
         @keyframes popIn {
@@ -367,9 +390,11 @@
             { name: "Confused_Hacker", text: "Анти-чит даже не понял, что произошло. Я тоже. Мы оба были в шоке. 10 банов из 10.", status: "PERMANENT", grad: "from-indigo-500 to-purple-500" }
         ];
 
+        // Оптимизация добавления HTML элементов в DOM (собираем в строку, добавляем один раз)
         const reviewsContainer = document.getElementById('reviews-container');
+        let reviewsHTML = '';
         reviews.forEach((r, index) => {
-            reviewsContainer.innerHTML += `
+            reviewsHTML += `
                 <div class="glass-card p-10 text-left bg-white/5 italic reveal transition-transform hover:-translate-y-2" style="transition-delay: ${index * 0.1}s">
                     <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"${r.text}"</p>
                     <div class="flex items-center gap-4">
@@ -382,14 +407,24 @@
                 </div>
             `;
         });
+        reviewsContainer.innerHTML = reviewsHTML;
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize);
+        
+        // Базовая оптимизация ресайза
+        let resizeTimeout;
+        function resize() { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resize, 100);
+        });
 
         class Particle {
             constructor() { this.init(); }
@@ -400,6 +435,8 @@
                 this.speedX = (Math.random() - 0.5) * 1.5;
                 this.speedY = (Math.random() - 0.5) * 1.5;
                 this.opacity = Math.random() * 0.5 + 0.3;
+                // Кешируем цвет сразу, чтобы Canvas не собирал строку 60 раз в секунду
+                this.color = `rgba(239, 68, 68, ${this.opacity})`;
             }
             update() {
                 this.x += this.speedX; this.y += this.speedY;
@@ -407,15 +444,20 @@
                 if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
             }
             draw() {
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-                ctx.fillStyle = `rgba(239, 68, 68, ${this.opacity})`;
+                ctx.beginPath(); 
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                ctx.fillStyle = this.color; // Используем закешированный цвет
                 ctx.fill();
             }
         }
 
         function initParticles() {
             resize();
-            particles = Array.from({ length: 100 }, () => new Particle());
+            // Оптимизация для мобильных устройств: меньше частиц для сохранения FPS
+            const isMobile = window.innerWidth < 768;
+            const particleCount = isMobile ? 35 : 100; 
+            
+            particles = Array.from({ length: particleCount }, () => new Particle());
             function loop() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 particles.forEach(p => { p.update(); p.draw(); });
