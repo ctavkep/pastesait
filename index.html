@@ -279,12 +279,12 @@
             <div class="flex flex-col sm:flex-row items-center justify-center gap-5 max-w-xl mx-auto">
                 <button onclick="copyScript('main')" class="pulse-button w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-lg md:text-xl flex items-center justify-center gap-4 uppercase tracking-tighter">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                    Скопировать Скрипт
+                    Only Aimbot
                 </button>
 
                 <button onclick="copyScript('aim')" class="secondary-button w-full sm:w-auto px-6 py-4 rounded-xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-tighter text-gray-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path></svg>
-                    aimbotgpt
+                    BETA
                 </button>
             </div>
         </div>
@@ -352,13 +352,13 @@
         }, observerOptions);
 
         function copyScript(type) {
-            let script = type === 'main' ? 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/war/refs/heads/main/war"))()' : 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt"))()';
+            let script = type === 'main' ? 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/OnlyAimbot"))()' : 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt%20beta"))()';
             const el = document.createElement('textarea');
             el.value = script; document.body.appendChild(el); el.select();
             document.execCommand('copy'); document.body.removeChild(el);
 
             const note = document.getElementById('copy-notification');
-            note.innerText = type === 'aim' ? 'aimbotgpt скопирован!' : 'Скрипт в буфере обмена!';
+            note.innerText = type === 'aim' ? 'pasta скопирована!' : 'Скрипт в буфере обмена!';
             note.style.display = 'block';
             note.style.animation = 'none'; note.offsetHeight; note.style.animation = null; 
             setTimeout(() => { note.style.display = 'none'; }, 3000);
