@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPTPastersScripts - ТОП 1 ПО ДЕТЕКТАМ</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -25,7 +25,7 @@
             scroll-behavior: smooth;
         }
 
-        /* --- ОБНОВЛЕННЫЙ АНИМИРОВАННЫЙ ФОН --- */
+        /* --- АНИМИРОВАННЫЙ ФОН --- */
         #bg-wrapper {
             position: fixed;
             top: 0;
@@ -46,15 +46,14 @@
             top: -25vh;
             left: -25vw;
             background: 
-                radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.2), transparent 50%),
-                radial-gradient(circle at 70% 70%, rgba(249, 115, 22, 0.1), transparent 50%);
+                radial-gradient(circle at 30% 30%, rgba(239, 68, 68, 0.3), transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(249, 115, 22, 0.18), transparent 50%);
             animation: rotateAmbient 20s linear infinite;
             filter: blur(80px);
             will-change: transform;
-            transform: translateZ(0); /* Аппаратное ускорение */
+            transform: translateZ(0);
         }
 
-        /* Оптимизированная анимация с поддержкой GPU */
         @keyframes rotateAmbient {
             0% { transform: rotate(0deg) scale(1.2) translateZ(0); }
             50% { transform: rotate(180deg) scale(1.4) translateZ(0); }
@@ -68,14 +67,12 @@
             width: 200%;
             height: 200%;
             pointer-events: none;
-            /* Переносим анимацию на псевдоэлемент, здесь оставляем только статику */
             transform: rotateX(60deg) translateZ(0);
             transform-origin: center;
             -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
             mask-image: radial-gradient(circle, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 75%);
         }
 
-        /* Используем ::before для анимации transform вместо тяжелого background-position */
         #grid-overlay::before {
             content: '';
             position: absolute;
@@ -84,8 +81,8 @@
             width: 100%; 
             height: calc(100% + 100px);
             background-image: 
-                linear-gradient(rgba(239, 68, 68, 0.2) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(239, 68, 68, 0.2) 2px, transparent 2px);
+                linear-gradient(rgba(239, 68, 68, 0.28) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(239, 68, 68, 0.28) 2px, transparent 2px);
             background-size: 100px 100px;
             animation: panGridGPU 3s linear infinite;
             will-change: transform;
@@ -130,31 +127,82 @@
         .delay-2 { animation-delay: 2s; }
         .delay-3 { animation-delay: 4s; }
 
-        .glass-card {
-            background: rgba(10, 10, 10, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* --- КРАСИВЫЙ СТИЛЬ СТЕКЛЯННЫХ КАРТОЧЕК КАК НА СКРИНШОТЕ С ОТЗЫВОМ --- */
+        .glass-card-translucent {
+            background: rgba(255, 255, 255, 0.035);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 28px;
+            box-shadow: 
+                0 20px 45px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12),
+                inset 0 0 25px rgba(239, 68, 68, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
-            transform: translateZ(0); /* Аппаратное ускорение */
+            transform: translateZ(0);
         }
 
-        .glass-card::before {
+        .glass-card-translucent:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.6),
+                0 0 35px rgba(239, 68, 68, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px) scale(1.01);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card-translucent::before {
             content: '';
             position: absolute;
             top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: all 0.6s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+            transition: all 0.7s ease;
         }
 
-        .glass-card:hover::before { left: 200%; }
+        .glass-card-translucent:hover::before { left: 200%; }
 
-        .glass-card:hover {
-            border-color: rgba(239, 68, 68, 0.5);
-            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.25);
+        /* Плашка тега */
+        .card-tag {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #f87171;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 5px 13px;
+            border-radius: 10px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Кнопка COPY */
+        .copy-btn-red {
+            background: #ef4444;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .copy-btn-red:hover {
+            background: #f87171;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.65);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn-red:active {
+            transform: translateY(1px);
         }
 
         .neon-text { text-shadow: 0 0 20px rgba(239, 68, 68, 0.7); }
@@ -173,6 +221,19 @@
         .pulse-button:hover {
             box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
             transform: scale(1.03) translateY(-2px);
+        }
+
+        .nav-hub-btn {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(249, 115, 22, 0.35));
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-hub-btn:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.45), rgba(249, 115, 22, 0.55));
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.6);
+            transform: translateY(-2px) scale(1.03);
         }
 
         .secondary-button {
@@ -203,10 +264,10 @@
         }
 
         .ban-toast {
-            background: rgba(10, 5, 5, 0.9);
+            background: rgba(10, 5, 5, 0.85);
             border-left: 4px solid #ef4444;
-            padding: 12px 18px; border-radius: 10px; font-size: 13px;
-            backdrop-filter: blur(10px); border: 1px solid rgba(239, 68, 68, 0.25);
+            padding: 12px 18px; border-radius: 12px; font-size: 13px;
+            backdrop-filter: blur(15px); border: 1px solid rgba(239, 68, 68, 0.35);
             animation: toastIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
                        toastOut 0.6s ease-in 4s forwards;
             will-change: transform, opacity;
@@ -226,7 +287,7 @@
             position: fixed; top: 25px; left: 50%; transform: translateX(-50%);
             background: #ef4444; color: white; padding: 14px 28px;
             border-radius: 50px; font-weight: 900; display: none; z-index: 2000;
-            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.5);
             text-transform: uppercase; letter-spacing: 1px;
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             will-change: transform, opacity;
@@ -251,9 +312,15 @@
         <canvas id="particleCanvas"></canvas>
     </div>
 
+    <!-- NAVBAR -->
     <nav class="fixed top-0 w-full z-50 px-6 py-5 flex justify-between items-center bg-black/30 backdrop-blur-xl border-b border-white/5 transition-all duration-300 hover:bg-black/50">
-        <div class="text-2xl font-black tracking-tighter neon-text hover:scale-105 transition-transform cursor-default">GPTPasters<span class="text-red-500">Scripts</span></div>
+        <a href="#" class="text-2xl font-black tracking-tighter neon-text hover:scale-105 transition-transform cursor-pointer">
+            GPTPasters<span class="text-red-500">Scripts</span>
+        </a>
         <div class="flex items-center gap-4">
+            <a href="#scripts-hub" class="text-xs md:text-sm font-bold text-gray-300 hover:text-red-400 transition-colors uppercase tracking-wider hidden sm:inline-block">
+                Скрипты
+            </a>
             <div class="flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/30 rounded-lg hover:bg-red-500/20 transition-colors cursor-default">
                 <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_10px_#ef4444]"></div>
                 <span class="text-[10px] font-black text-red-500 uppercase tracking-widest">DETECTION: 100%</span>
@@ -262,6 +329,7 @@
     </nav>
 
     <main class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-20 text-center">
+        <!-- HERO СЕКЦИЯ -->
         <div class="fade-in max-w-5xl w-full">
             <span class="px-5 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] md:text-xs font-black uppercase tracking-[0.25em] mb-6 inline-block hover:bg-red-500/20 transition-colors">
                 #1 MOST DETECTED ROBLOX SOFTWARE
@@ -272,25 +340,33 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-500 to-orange-500 drop-shadow-[0_0_20px_rgba(239,68,68,0.5)]">В ЛЮБОМ РЕЖИМЕ</span>
             </h1>
             
-            <p class="text-gray-400 text-base md:text-xl max-w-2xl mx-auto mb-14 font-medium leading-relaxed drop-shadow-md">
+            <p class="text-gray-400 text-base md:text-xl max-w-2xl mx-auto mb-12 font-medium leading-relaxed drop-shadow-md">
                 Зачем играть годами, если можно получить пермач за секунду? Самый быстрый способ очистить свою жизнь от Роблокса.
             </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-5 max-w-xl mx-auto">
-                <button onclick="copyScript('main')" class="pulse-button w-full sm:w-auto px-10 py-5 rounded-2xl font-black text-lg md:text-xl flex items-center justify-center gap-4 uppercase tracking-tighter">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto mb-6">
+                <button onclick="copyScript('main')" class="pulse-button w-full sm:w-auto px-8 py-5 rounded-2xl font-black text-base md:text-lg flex items-center justify-center gap-3 uppercase tracking-tighter">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
                     Only Aimbot
                 </button>
 
-                <button onclick="copyScript('aim')" class="secondary-button w-full sm:w-auto px-6 py-4 rounded-xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-tighter text-gray-300">
+                <button onclick="copyScript('aim')" class="secondary-button w-full sm:w-auto px-6 py-5 rounded-2xl font-black text-sm flex items-center justify-center gap-2 uppercase tracking-tighter text-gray-300">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path></svg>
                     BETA
                 </button>
+
+                <a href="#scripts-hub" class="nav-hub-btn w-full sm:w-auto px-8 py-5 rounded-2xl font-black text-sm md:text-base flex items-center justify-center gap-3 uppercase tracking-wider text-red-100">
+                    <svg class="w-5 h-5 text-red-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                    Каталог Скриптов
+                </a>
             </div>
         </div>
 
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mt-40 max-w-6xl w-full">
-            <div class="glass-card p-10 text-left bg-white/5 italic reveal floating delay-1 transition-transform hover:-translate-y-2">
+        <!-- 3 ФИЧИ (КАРТОЧКИ) -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 mt-32 max-w-6xl w-full">
+            <div class="glass-card-translucent p-10 text-left italic reveal floating delay-1 transition-transform hover:-translate-y-2">
                 <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"Алгоритм, который пишет в лог анти-чита 'Эй, я тут использую скрипт!' каждые 10мс."</p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
@@ -303,7 +379,7 @@
                 </div>
             </div>
 
-            <div class="glass-card p-10 text-left bg-white/5 italic reveal floating delay-2 transition-transform hover:-translate-y-2">
+            <div class="glass-card-translucent p-10 text-left italic reveal floating delay-2 transition-transform hover:-translate-y-2">
                 <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"Никакой защиты. Мы буквально убрали все проверки, чтобы вас нашли быстрее."</p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center border border-orange-500/20 shadow-[0_0_15px_rgba(249,115,22,0.2)]">
@@ -316,7 +392,7 @@
                 </div>
             </div>
 
-            <div class="glass-card p-10 text-left bg-white/5 italic reveal floating delay-3 transition-transform hover:-translate-y-2">
+            <div class="glass-card-translucent p-10 text-left italic reveal floating delay-3 transition-transform hover:-translate-y-2">
                 <p class="text-gray-300 mb-8 font-medium text-lg leading-relaxed">"Майним догикоины на вашем фоне, пока вы ждете загрузки меню бана."</p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-gray-500/10 flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
@@ -330,13 +406,192 @@
             </div>
         </section>
 
+        <!-- ==================================================== -->
+        <!-- ХАБ СКРИПТОВ: СТЕКЛЯННЫЕ КАРТОЧКИ -->
+        <!-- ==================================================== -->
+        <section id="scripts-hub" class="mt-40 max-w-6xl w-full reveal text-left">
+            <div class="text-center mb-16">
+                <span class="px-4 py-1.5 rounded-full bg-red-500/15 border border-red-500/40 text-red-400 text-[11px] font-black uppercase tracking-widest">
+                    Script Repository
+                </span>
+                <h2 class="text-4xl md:text-6xl font-black mt-4 uppercase tracking-tighter neon-text" style="font-family: 'Montserrat', sans-serif;">
+                    ХАБ СКРИПТОВ
+                </h2>
+                <p class="text-gray-400 text-base md:text-lg max-w-xl mx-auto mt-4 font-normal">
+                    Выберите скрипт, нажмите «COPY» и вставьте в ваш инжектор.
+                </p>
+            </div>
+
+            <!-- СЕТКА КАРТОЧЕК -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+
+                <!-- 00_BETA Silent Aim Detector -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">Aim Detector</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">BETA Silent Aim Detector</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                             пассивно анализирует оружейную систему игры (Raycast, Mouse.Hit, ACS и др.), какой silent-aim скрипт (01–08) лучше всего подойдёт под текущий плейс. Удаление клавиша Delete.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="BETA Silent Aim Detector" data-copy-content="-- 00_BETA Silent Aim Detector&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/Silent%20Aim%20Detector.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 01_raycast_silent -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">01_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">01_raycast silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            raycast silent — silent aim для Raycast/Spherecast: перенаправляет выстрелы в ближайшую голову, подсвечивает игроков (chams) и обходит анти-чит.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="01_raycast_silent" data-copy-content="-- 01_raycast_silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/raycast_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 02_findpartonray_silent -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">02_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">02_findpartonray silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            findpartonray silent — silent aim для устаревших FindPartOnRay*: подменяет луч в ближайшую голову, подсвечивает игроков и глушит анти-чит.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="02_findpartonray_silent" data-copy-content="-- 02_findpartonray silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/raycast_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 03_mouse_index_silent-->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">03_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">03_mouse_index silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            mouse_index silent — silent aim через перехват Mouse.Hit / Mouse.Target / Mouse.UnitRay: подменяет возвращаемый луч в ближайшую голову, подсвечивает игроков (chams) и обходит анти-чит.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="03_mouse_index_silent" data-copy-content="-- 03_mouse_index_silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/mouse_index_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 04_viewport_point_to_ray_silent -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">04_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">04_viewport_point_to_ray silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            viewport_point_to_ray silent — silent aim через хук Camera:ViewportPointToRay / ScreenPointToRay: перенаправляет луч камеры в ближайшую голову в FOV, подсвечивает игроков и глушит анти-чит.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="04_viewport_point_to_ray_silent" data-copy-content="-- 04_viewport_point_to_ray_silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/viewport_point_to_ray_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 05_acs_engine_silent -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">05_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">05_acs_engine silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            acs_engine silent — silent aim для ACS Engine: хук CastRay / CreateBullet в GC, подмена аргументов ремоутов урона с авто-наведением в голову и байпасом проверок.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="05_acs_engine_silent" data-copy-content="-- 05_acs_engine_silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/acs_engine_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 06_ray_constructor_hookfunction -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">06_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">06_ray_hookfunction</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            ray_constructor_hookfunction — silent aim через прямой hookfunction конструктора Ray.new: подменяет origin и direction до вызова __namecall, подсвечивает игроков и обходит анти-чит.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="06_ray_constructor_hookfunction" data-copy-content="-- 06_ray_constructor_hookfunction&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/ray_constructor_hookfunction.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 07_hitbox_expander_silent  -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">07_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">07_hitbox_expander silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            hitbox_expander silent — расширение хитбокса головы с маскировкой через __index: визуальный размер стандартный, попадания в разы легче, байпас локальных проверок.
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="07_hitbox_expander_silent" data-copy-content="-- 07_hitbox_expander_silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/hitbox_expander_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+                <!-- 08_spherecast_blaster_silent  -->
+                <div class="glass-card-translucent p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="mb-5">
+                            <span class="card-tag">08_silent aim</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3 italic">08_spherecast_blaster silent</h3>
+                        <p class="text-gray-300 text-sm mb-8 leading-relaxed italic">
+                            spherecast_blaster silent — silent aim для игры Deagle Duels
+                        </p>
+                    </div>
+                    <button onclick="copyCustomScript(this)" data-copy-name="08_spherecast_blaster_silent" data-copy-content="-- 08_spherecast_blaster_silent&#10;loadstring(game:HttpGet('https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/spherecast_blaster_silent.lua'))()" class="copy-btn-red w-full py-4 px-4 flex items-center justify-center gap-2.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy
+                    </button>
+                </div>
+
+
+
+            </div>
+        </section>
+
+        <!-- ОТЗЫВЫ (ДОСКА ПОЧЕТА) -->
         <section class="mt-40 max-w-6xl w-full reveal">
             <h2 class="text-4xl md:text-6xl font-black mb-16 uppercase tracking-tighter neon-text" style="font-family: 'Montserrat', sans-serif;">Доска Почета <br class="md:hidden"><span class="text-xl md:text-3xl text-gray-400">(Забаненные)</span></h2>
             <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </section>
 
+        <!-- FOOTER -->
         <footer class="mt-48 pb-10 text-gray-700 text-[10px] md:text-xs uppercase font-black tracking-[0.5em] reveal">
-            GPTPasters 1488 — ТОЛЬКО ДЛЯ ТЕХ, КТО НЕ БОИТСЯ ПОТЕРЯТЬ ВСЁ
+            GPTPasters 2026 — ТОЛЬКО ДЛЯ ТЕХ, КТО НЕ БОИТСЯ ПОТЕРЯТЬ ВСЁ
         </footer>
     </main>
 
@@ -353,14 +608,29 @@
 
         function copyScript(type) {
             let script = type === 'main' ? 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/pasteware/refs/heads/main/OnlyAimbot"))()' : 'loadstring(game:HttpGet("https://raw.githubusercontent.com/ctavkep/Ctavkehub/refs/heads/main/pastaScriptschatgpt%20beta"))()';
+            performCopy(script, type === 'aim' ? 'pasta скопирована!' : 'Скрипт в буфере обмена!');
+        }
+
+        function copyCustomScript(buttonElement) {
+            const scriptContent = buttonElement.getAttribute('data-copy-content') || '';
+            const scriptName = buttonElement.getAttribute('data-copy-name') || 'Скрипт';
+            performCopy(scriptContent, `${scriptName} скопирован!`);
+        }
+
+        function performCopy(text, message) {
             const el = document.createElement('textarea');
-            el.value = script; document.body.appendChild(el); el.select();
-            document.execCommand('copy'); document.body.removeChild(el);
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
 
             const note = document.getElementById('copy-notification');
-            note.innerText = type === 'aim' ? 'pasta скопирована!' : 'Скрипт в буфере обмена!';
+            note.innerText = message;
             note.style.display = 'block';
-            note.style.animation = 'none'; note.offsetHeight; note.style.animation = null; 
+            note.style.animation = 'none';
+            note.offsetHeight;
+            note.style.animation = null; 
             setTimeout(() => { note.style.display = 'none'; }, 3000);
         }
 
@@ -386,19 +656,18 @@
             { name: "ctavkem", text: "Я хотел скачать скрипт, чтобы увидеть фурри, но в итоге родители сказали, что я приёмный, после того как мой аккаунт с виртуальным имуществом (стоимостью как целый Ирак) забанили за инжект!.", status: "A furry has been detected!(HWID BANNED)", grad: "from-yellow-400 to-red-600", isMain: true },
             { name: "Skid_Enthusiast", text: "Топ софт. Ввел ключ, нажал инжект — и сразу синий экран смерти. В поддержке сказали, что это 'Фича'. Рекомендую всем!", status: "HWID BANNED", grad: "from-blue-500 to-purple-500" },
             { name: "AccountCreator_99", text: "Раньше я тратил деньги на робуксы, теперь я трачу время на создание нового аккаунта каждые 5 минут. Невероятный опыт!", status: "IP TERMINATED", grad: "from-green-500 to-teal-500" },
-            { name: "OldSchool_Gamer", text: "Мама спросила, почему я плачу. Я ответил, что мой аккаунт 2016 года улетел в помойку за секунду. Скрипт просто огонь.", status: "DELETED ACCOUNT", grad: "from-yellow-500 to-red-500" },
+            { name: "OldSchool_Gamer", text: "Мама спросила, почему я плачу. Я ответил, что мой старый аккаунт улетел в помойку за секунду. Скрипт просто огонь.", status: "DELETED ACCOUNT", grad: "from-yellow-500 to-red-500" },
             { name: "L33t_Girl_Roblox", text: "Лучшее вложение 0 рублей. Почувствовала себя хакером, когда увидела надпись 'You are banned from this game'.", status: "SERVER KICKED", grad: "from-pink-500 to-rose-500" },
         ];
 
         const reviewsContainer = document.getElementById('reviews-container');
         let reviewsHTML = '';
         reviews.forEach((r, index) => {
-            // Добавляем специальные классы, если это главный отзыв
-            const extraClass = r.isMain ? 'md:col-span-2 border border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)] bg-red-900/10' : 'bg-white/5 border border-white/5';
+            const extraClass = r.isMain ? 'md:col-span-2 border border-red-500/40 shadow-[0_0_30px_rgba(239,68,68,0.15)] bg-red-900/10' : '';
             const textClass = r.isMain ? 'text-xl md:text-2xl text-white' : 'text-lg text-gray-300';
             
             reviewsHTML += `
-                <div class="glass-card p-10 text-left italic reveal transition-transform hover:-translate-y-2 ${extraClass}" style="transition-delay: ${index * 0.1}s">
+                <div class="glass-card-translucent p-10 text-left italic reveal transition-transform hover:-translate-y-2 ${extraClass}" style="transition-delay: ${index * 0.1}s">
                     <p class="${textClass} mb-8 font-medium leading-relaxed">"${r.text}"</p>
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br ${r.grad}"></div>
@@ -469,7 +738,3 @@
     </script>
 </body>
 </html>
-
-
-
-
